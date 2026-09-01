@@ -1,12 +1,15 @@
+import { checkoutSelectors } from "../support/selectors/checkoutSelectors";
+
 class CheckoutPage {
   elements = {
-    firstName: () => cy.get('[data-test="firstName"]'),
-    lastName: () => cy.get('[data-test="lastName"]'),
-    postalCode: () => cy.get('[data-test="postalCode"]'),
-    continueButton: () => cy.get('[data-test="continue"]'),
-    finishButton: () => cy.get('[data-test="finish"]'),
-    errorMessage: () => cy.get('[data-test="error"]'),
-    completeHeader: () => cy.get(".complete-header"),
+    // Centralizacao de seletores reduz acoplamento e facilita evolucao dos testes.
+    firstName: () => cy.get(checkoutSelectors.firstNameInput),
+    lastName: () => cy.get(checkoutSelectors.lastNameInput),
+    postalCode: () => cy.get(checkoutSelectors.postalCodeInput),
+    continueButton: () => cy.get(checkoutSelectors.continueButton),
+    finishButton: () => cy.get(checkoutSelectors.finishButton),
+    errorMessage: () => cy.get(checkoutSelectors.errorMessage),
+    completeHeader: () => cy.get(checkoutSelectors.completeHeader),
   };
 
   fillInfo({ firstName, lastName, postalCode }) {

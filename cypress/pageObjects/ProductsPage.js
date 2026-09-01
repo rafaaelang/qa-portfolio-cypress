@@ -1,12 +1,15 @@
+import { productsSelectors } from "../support/selectors/productsSelectors";
+
 class ProductsPage {
   elements = {
-    pageTitle: () => cy.get(".title"),
-    sortDropdown: () => cy.get(".product_sort_container"),
-    productNames: () => cy.get(".inventory_item_name"),
-    productPrices: () => cy.get(".inventory_item_price"),
-    addToCartButtons: () => cy.get('button[id^="add-to-cart"]'),
-    cartBadge: () => cy.get(".shopping_cart_badge"),
-    cartIcon: () => cy.get(".shopping_cart_link"),
+    // O mesmo mapa de seletores e usado por todos os fluxos de produto/carrinho.
+    pageTitle: () => cy.get(productsSelectors.pageTitle),
+    sortDropdown: () => cy.get(productsSelectors.sortDropdown),
+    productNames: () => cy.get(productsSelectors.productNames),
+    productPrices: () => cy.get(productsSelectors.productPrices),
+    addToCartButtons: () => cy.get(productsSelectors.addToCartButtons),
+    cartBadge: () => cy.get(productsSelectors.cartBadge),
+    cartIcon: () => cy.get(productsSelectors.cartIcon),
   };
 
   sortBy(optionValue) {

@@ -7,6 +7,26 @@
     "username": "locked_out_user",
     "password": "secret_sauce"
   },
+  "invalidUser": {
+    "username": "usuario_invalido",
+    "password": "senha_errada"
+  },
+  "emptyCredentials": {
+    "username": "",
+    "password": ""
+  },
+  "edgeCaseCredentials": [
+    {
+      "username": "problem_user",
+      "password": "senha_errada",
+      "expectedMessage": "Username and password do not match"
+    },
+    {
+      "username": "performance_glitch_user",
+      "password": "senha_errada",
+      "expectedMessage": "Username and password do not match"
+    }
+  ],
   "checkoutInfo": {
     "firstName": "Maria",
     "lastName": "Silva",

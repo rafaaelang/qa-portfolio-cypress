@@ -3,11 +3,18 @@ import ProductsPage from "../../pageObjects/ProductsPage";
 import CartPage from "../../pageObjects/CartPage";
 
 describe("Produtos e Carrinho - SauceDemo", () => {
-  beforeEach(() => {
-    cy.fixture("users").then((users) => {
-      LoginPage.visit();
-      LoginPage.login(users.validUser.username, users.validUser.password);
+  let users;
+
+  before(() => {
+    // Fixture em before evita recarregar o mesmo JSON a cada teste.
+    cy.fixture("users").then((data) => {
+      users = data;
     });
+  });
+
+  beforeEach(() => {
+    LoginPage.visit();
+    LoginPage.login(users.validUser.username, users.validUser.password);
   });
 
   it("deve ordenar produtos por preço (menor para maior)", () => {
