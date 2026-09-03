@@ -10,21 +10,41 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do código
+      - name: Checkout do codigo
         uses: actions/checkout@v4
 
-      - name: Rodar testes Cypress
+      - name: Configurar Java para o Allure
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Rodar testes Cypress e gerar relatorios
         uses: cypress-io/github-action@v6
         with:
-          build: npm install
-          command: npm run cy:run
+          build: npm ci
+          command: npm run report:ci
 
-      - name: Upload do relatório HTML
+      - name: Upload do relatorio Mochawesome
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: mochawesome-report
           path: cypress/reports/html
+
+      - name: Upload do relatorio Allure
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-report
+          path: allure-report
+
+      - name: Upload dos resultados brutos do Allure
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results
+          path: allure-results
 
       - name: Upload de screenshots em caso de falha
         uses: actions/upload-artifact@v4
@@ -32,3 +52,10 @@ jobs:
         with:
           name: cypress-screenshots
           path: cypress/screenshots
+
+      - name: Upload de videos em caso de falha
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos

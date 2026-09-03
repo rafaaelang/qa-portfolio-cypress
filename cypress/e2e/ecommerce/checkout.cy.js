@@ -4,17 +4,23 @@ import CartPage from "../../pageObjects/CartPage";
 import CheckoutPage from "../../pageObjects/CheckoutPage";
 
 describe("Checkout - SauceDemo", () => {
+  let users;
   let checkoutInfo;
 
-  beforeEach(() => {
-    cy.fixture("users").then((users) => {
-      checkoutInfo = users.checkoutInfo;
-      LoginPage.visit();
-      LoginPage.login(users.validUser.username, users.validUser.password);
-      ProductsPage.addFirstProductToCart();
-      ProductsPage.goToCart();
-      CartPage.goToCheckout();
+  before(() => {
+    // Guardamos os dados em memoria para deixar o beforeEach focado no fluxo do teste.
+    cy.fixture("users").then((data) => {
+      users = data;
+      checkoutInfo = data.checkoutInfo;
     });
+  });
+
+  beforeEach(() => {
+    LoginPage.visit();
+    LoginPage.login(users.validUser.username, users.validUser.password);
+    ProductsPage.addFirstProductToCart();
+    ProductsPage.goToCart();
+    CartPage.goToCheckout();
   });
 
   it("deve completar o checkout com dados válidos", () => {

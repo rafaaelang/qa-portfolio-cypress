@@ -1,7 +1,7 @@
-// Comando customizado de login para reaproveitar entre specs
+import LoginPage from "../pageObjects/LoginPage";
+
+// O comando reaproveita o Page Object para manter uma unica fonte de verdade do login.
 Cypress.Commands.add("login", (username, password) => {
-  cy.visit("/");
-  cy.get("#user-name").type(username);
-  cy.get("#password").type(password);
-  cy.get("#login-button").click();
+  LoginPage.visit();
+  LoginPage.login(username, password);
 });

@@ -1,9 +1,12 @@
+import { loginSelectors } from "../support/selectors/loginSelectors";
+
 class LoginPage {
   elements = {
-    username: () => cy.get("#user-name"),
-    password: () => cy.get("#password"),
-    loginButton: () => cy.get("#login-button"),
-    errorMessage: () => cy.get('[data-test="error"]'),
+    // Centralizar seletores evita manutencao espalhada quando o HTML muda.
+    username: () => cy.get(loginSelectors.usernameInput),
+    password: () => cy.get(loginSelectors.passwordInput),
+    loginButton: () => cy.get(loginSelectors.submitButton),
+    errorMessage: () => cy.get(loginSelectors.errorMessage),
   };
 
   visit() {

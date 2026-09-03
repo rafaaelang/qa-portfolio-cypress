@@ -1,4 +1,4 @@
-describe("API - Autenticação (mock via cy.intercept)", () => {
+describe("API - Autenticacao mockada (cy.intercept)", () => {
   const apiUrl = Cypress.env("apiUrl");
 
   beforeEach(() => {

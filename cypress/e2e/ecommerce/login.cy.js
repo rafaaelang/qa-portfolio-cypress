@@ -1,9 +1,11 @@
 import LoginPage from "../../pageObjects/LoginPage";
+import ProductsPage from "../../pageObjects/ProductsPage";
 
 describe("Login - SauceDemo", () => {
   let users;
 
   before(() => {
+    // Carregamos fixture uma vez para reduzir custo e manter os cenarios deterministas.
     cy.fixture("users").then((data) => {
       users = data;
     });
@@ -16,7 +18,7 @@ describe("Login - SauceDemo", () => {
   it("deve logar com sucesso usando credenciais válidas", () => {
     LoginPage.login(users.validUser.username, users.validUser.password);
     cy.url().should("include", "/inventory.html");
-    cy.get(".title").should("contain.text", "Products");
+    ProductsPage.elements.pageTitle().should("contain.text", "Products");
   });
 
   it("deve bloquear usuário marcado como locked_out_user", () => {
@@ -28,7 +30,7 @@ describe("Login - SauceDemo", () => {
   });
 
   it("deve exibir erro para credenciais inválidas", () => {
-    LoginPage.login("usuario_invalido", "senha_errada");
+    LoginPage.login(users.invalidUser.username, users.invalidUser.password);
     LoginPage.getErrorMessage().should(
       "contain.text",
       "Username and password do not match"
@@ -41,5 +43,13 @@ describe("Login - SauceDemo", () => {
       "contain.text",
       "Username is required"
     );
+  });
+
+  it("deve exibir erro para usuarios invalidos do dataset", () => {
+    // Dataset facilita expandir cenarios sem duplicar estrutura de teste.
+    users.edgeCaseCredentials.forEach(({ username, password, expectedMessage }) => {
+      LoginPage.login(username, password);
+      LoginPage.getErrorMessage().should("contain.text", expectedMessage);
+    });
   });
 });

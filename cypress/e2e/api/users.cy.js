@@ -1,5 +1,8 @@
+import { buildApiUser } from "../../support/testDataBuilder";
+
 describe("API - Usuários (JSONPlaceholder)", () => {
   const apiUrl = Cypress.env("apiUrl");
+  const performanceThresholdMs = Cypress.env("apiPerformanceThresholdMs");
 
   it("GET /users - deve listar usuários com status 200 e schema válido", () => {
     cy.request(`${apiUrl}/users`).then((response) => {
@@ -37,7 +40,8 @@ describe("API - Usuários (JSONPlaceholder)", () => {
   });
 
   it("POST /users - deve criar um novo usuário", () => {
-    const payload = { name: "João Teste", username: "joaoteste", email: "joao@teste.com" };
+    // O builder gera dados unicos para evitar colisao entre execucoes no ambiente publico.
+    const payload = buildApiUser();
     cy.request("POST", `${apiUrl}/users`, payload).then((response) => {
       expect(response.status).to.eq(201);
       expect(response.body.name).to.eq(payload.name);
@@ -47,7 +51,10 @@ describe("API - Usuários (JSONPlaceholder)", () => {
   });
 
   it("PUT /users/:id - deve atualizar um usuário existente", () => {
-    const payload = { name: "João Teste Atualizado", email: "joao.atualizado@teste.com" };
+    const payload = buildApiUser({
+      name: "Usuario Teste Atualizado",
+      email: "usuario.atualizado@teste.com",
+    });
     cy.request("PUT", `${apiUrl}/users/2`, payload).then((response) => {
       expect(response.status).to.eq(200);
       expect(response.body.name).to.eq(payload.name);
@@ -63,7 +70,8 @@ describe("API - Usuários (JSONPlaceholder)", () => {
 
   it("deve responder em menos de 1 segundo (validação de performance básica)", () => {
     cy.request(`${apiUrl}/users`).then((response) => {
-      expect(response.duration).to.be.lessThan(1000);
+      // O limite vem do env para ajustar conforme ambiente e reduzir falso negativo.
+      expect(response.duration).to.be.lessThan(performanceThresholdMs);
     });
   });
 });

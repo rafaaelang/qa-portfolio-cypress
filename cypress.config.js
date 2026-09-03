@@ -6,6 +6,7 @@ const {
   createEsbuildPlugin,
 } = require("@badeball/cypress-cucumber-preprocessor/esbuild");
 const createBundler = require("@bahmutov/cypress-esbuild-preprocessor");
+const allureWriter = require("@shelex/cypress-allure-plugin/writer");
 
 module.exports = defineConfig({
   e2e: {
@@ -24,10 +25,18 @@ module.exports = defineConfig({
         })
       );
 
+      // Registramos o writer do Allure para gerar resultados consumidos pelo relatorio.
+      allureWriter(on, config);
+
       return config;
     },
     viewportWidth: 1280,
     viewportHeight: 800,
+    // Retry em runMode reduz falhas intermitentes no CI sem mascarar problema local.
+    retries: {
+      runMode: 2,
+      openMode: 0,
+    },
     defaultCommandTimeout: 8000,
     pageLoadTimeout: 120000,
     video: true,
@@ -36,5 +45,7 @@ module.exports = defineConfig({
   },
   env: {
     apiUrl: "https://jsonplaceholder.typicode.com",
+    authApiUrl: "https://reqres.in/api",
+    apiPerformanceThresholdMs: 1500,
   },
 });

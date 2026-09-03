@@ -1,5 +1,6 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import LoginPage from "../../../pageObjects/LoginPage";
+import ProductsPage from "../../../pageObjects/ProductsPage";
 
 Given("que estou na página de login", () => {
   LoginPage.visit();
@@ -16,7 +17,8 @@ When("eu clico no botão de login", () => {
 
 Then("eu devo ser redirecionado para a página de produtos", () => {
   cy.url().should("include", "/inventory.html");
-  cy.get(".title").should("contain.text", "Products");
+  // Reutilizamos o Page Object para manter o mesmo ponto de manutencao dos seletores.
+  ProductsPage.elements.pageTitle().should("contain.text", "Products");
 });
 
 Then("eu devo ver a mensagem de erro {string}", (mensagemEsperada) => {

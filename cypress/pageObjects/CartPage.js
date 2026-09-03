@@ -1,8 +1,11 @@
+import { cartSelectors } from "../support/selectors/cartSelectors";
+
 class CartPage {
   elements = {
-    cartItems: () => cy.get(".cart_item"),
-    removeButtons: () => cy.get('button[id^="remove"]'),
-    checkoutButton: () => cy.get('[data-test="checkout"]'),
+    // Mantemos seletores de carrinho em arquivo dedicado para facilitar manutencao.
+    cartItems: () => cy.get(cartSelectors.cartItems),
+    removeButtons: () => cy.get(cartSelectors.removeButtons),
+    checkoutButton: () => cy.get(cartSelectors.checkoutButton),
   };
 
   removeFirstItem() {
